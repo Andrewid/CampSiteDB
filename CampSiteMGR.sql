@@ -13,4 +13,9 @@ CREATE TABLE Campsite_ReservedDates (
     DayReserved DATE NOT NULL
 );
 
+SET IDENTITY_insert dbo.Reservation ON;
+-- numDays = 4
+-- Campsite.BaseCost = $31
+INSERT Reservation VALUES ('1','1',CURRENT_DATE,dateadd(day, 4, CURRENT_DATE), 4 * $31 )
+SET IDENTITY_insert dbo.Reservation OFF;
 -----------------------------------------------------------
