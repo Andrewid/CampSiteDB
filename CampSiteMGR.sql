@@ -91,3 +91,57 @@ INSERT CampSite_Amenity (CampSiteID_PKFK, AmenityID_PKFK, Quantity) VALUES ('2',
 INSERT CampSite_Amenity (CampSiteID_PKFK, AmenityID_PKFK, Quantity) VALUES ('2', '11', '1')
 INSERT CampSite_Amenity (CampSiteID_PKFK, AmenityID_PKFK, Quantity) VALUES ('2', '12', '1')
 INSERT CampSite_Amenity (CampSiteID_PKFK, AmenityID_PKFK, Quantity) VALUES ('2', '13', '1')
+
+
+
+--drop table campsites;
+--drop table campgrounds;
+
+CREATE TABLE CampSites
+(
+	CampSiteID int NOT NULL IDENTITY(1, 1) PRIMARY KEY,
+	CampgroundID int,
+	Longitude float,
+	Latitude float,
+	ImageURL nvarchar(1000),
+	Capacity int,
+	BaseCost smallMoney
+);
+
+CREATE TABLE CampGrounds
+(
+	CampgroundID int NOT NULL IDENTITY(1, 1) PRIMARY KEY,
+	CampgroundName nvarchar(255),
+	HostID int,
+	ParkingStalls int,
+	AddressID int,
+	Website nvarchar(1000),
+	StandardCheckoutTime int
+
+);
+
+
+INSERT INTO CampGrounds(CampgroundName, HostID, ParkingStalls, AddressID, Website, StandardCheckoutTime) VALUES('Bridge Bay', 1, 300, 1, 'https://www.nps.gov/yell/planyourvisit/bridgebaycg.htm', '8');
+--Bridge Bay Campground, 260 Bridge Bay Campground, Yellowstone National Park, WY 82190
+
+INSERT INTO CampSites(CampgroundID, Longitude, Latitude, ImageURL, Capacity, BaseCost) VALUES(1,  42.706769, -113.6592416, 'https://www.yellowstonenationalparklodges.com/lodgings/campground/bridge-bay-campground/', 2, 25.25);
+
+
+
+INSERT INTO CampGrounds(CampgroundName, HostID, ParkingStalls, AddressID, Website, StandardCheckoutTime) VALUES('Madison', 1, 270, 2, 'https://www.yellowstonenationalparklodges.com/lodgings/campground/madison-campground/', 8);
+
+INSERT INTO CampSites(CampgroundID, Longitude, Latitude, ImageURL, Capacity, BaseCost) VALUES(2, 4438.725, 11051.687, 'https://ynpres1.xanterra.com/CGI-BIN/LANSAWEB?WEBEVENT+R616E0F8B07058601903A004+RES+ENG', 2, 25.25);
+--Madison Sm Tent-Only Site
+
+-- confused on capacity:
+
+INSERT INTO CampGrounds(CampgroundName, HostID, ParkingStalls, AddressID, Website, StandardCheckoutTime) VALUES('Canyon', 1, 270, 3, 'https://www.yellowstonenationalparklodges.com/lodgings/campground/canyon-campground/', 8);
+--Canyon Campground, 27 Andesite Ln, Yellowstone National Park, WY 82190
+
+
+INSERT INTO CampSites(CampgroundID, Longitude, Latitude, ImageURL, Capacity, BaseCost) VALUES(3, 4444.118, 11029.17, 'https://ynpres1.xanterra.com/cgi-bin/lansaweb?procfun+rn+resnet+RES+funcparms+UP(A2560):;YCSUM9;052419;1;1;0;010;?/&_ga=2.228702105.423326928.1539208156-2092921698.1539050501', 1, 30.0 );
+
+
+
+--select * from campgrounds;
+--select * from campsites;
