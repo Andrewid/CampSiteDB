@@ -5,7 +5,8 @@ CREATE TABLE Reservations (
     CampsiteID INT NOT NULL,        --FK
     CheckIn_Date DATE NOT NULL,
     CheckOut_Date DATE NOT NULL,
-    Invoice_Total SMALLMONEY NOT NULL
+    Invoice_Total SMALLMONEY NOT NULL,
+    Valid BIT -- default is 1
 );
 
 SET IDENTITY_insert dbo.Reservation ON;
@@ -24,6 +25,7 @@ SET IDENTITY_insert dbo.Reservation OFF;
 CREATE TABLE Campsite_ReservedDates (
     CampsiteID INT NOT NULL,        --FK
     DayReserved DATE NOT NULL
+    Valid BIT -- set to 0 for cancelled, default is 1
 );
 
 -- Now, these insert statements for the Campsite_ReservedDates seem to be asking to be procedural 
@@ -144,3 +146,41 @@ INSERT INTO CampSites(CampgroundID, Longitude, Latitude, ImageURL, BaseCost) VAL
 
 --select * from campgrounds;
 --select * from campsites;
+
+CREATE TABLE Person (
+	UserID int IDENTITY(1, 1) PRIMARY KEY,
+	Email varchar(320),
+	Firstname varchar(50),
+	Lastname varchar(50),
+	PhoneNumber varchar(15),
+	Date_of_Birth date,
+	Addres int NOT NULL
+);
+
+CREATE TABLE Addresses (
+	AddresID int IDENTITY(1, 1) PRIMARY KEY,
+	Street nvarchar(255),
+	State nvarchar(255),
+	Zip nvarChar(255)
+);
+
+INSERT INTO Person(Email, Firstname, Lastname, PhoneNumber, Date_of_Birth, Addres) 
+	VALUES ('exemail@aol.com', 'Bob', 'Broker', '4354235346', '1992/04/16', 1)
+
+INSERT INTO Person(Email, Firstname, Lastname, PhoneNumber, Date_of_Birth, Addres) 
+	VALUES ('exe2mail@aol.com', 'Rick', 'Schroder', '8012489534', '1984/11/23', 2)
+
+INSERT INTO Addresses(Street, State, Zip)
+	VALUES ('2045 North Waverly Street', 'AZ', '85001')
+
+INSERT INTO Addresses(Street, State, Zip)
+	VALUES ('4307 South Front Street', 'CA', '90001')
+
+/*SELECT *
+FROM Person
+
+SELECT *
+FROM Addresses
+
+DROP TABLE Person;
+DROP TABLE Addresses;*/
