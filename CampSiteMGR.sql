@@ -5,7 +5,8 @@ CREATE TABLE Reservations (
     CampsiteID INT NOT NULL,        --FK
     CheckIn_Date DATE NOT NULL,
     CheckOut_Date DATE NOT NULL,
-    Invoice_Total SMALLMONEY NOT NULL
+    Invoice_Total SMALLMONEY NOT NULL,
+    Valid BIT -- default is 1
 );
 
 SET IDENTITY_insert dbo.Reservation ON;
@@ -24,6 +25,7 @@ SET IDENTITY_insert dbo.Reservation OFF;
 CREATE TABLE Campsite_ReservedDates (
     CampsiteID INT NOT NULL,        --FK
     DayReserved DATE NOT NULL
+    Valid BIT -- set to 0 for cancelled, default is 1
 );
 
 -- Now, these insert statements for the Campsite_ReservedDates seem to be asking to be procedural 
