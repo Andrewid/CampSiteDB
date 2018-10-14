@@ -165,10 +165,10 @@ CREATE TABLE CampSite_Amenity
  PRIMARY KEY (CampSiteID_PKFK, AmenityID_PKFK)
 )
 ALTER TABLE CampSite_Amenity
-ADD CONSTRAINT CampSiteID_PKFK FOREIGN KEY (CampSiteID_PKFK)
+ADD CONSTRAINT CampSiteID_FK FOREIGN KEY (CampSiteID_PKFK) -- <-- THUY CHANGED CampSiteID_PKFK to just CampSiteID_FK
  REFERENCES CampSites(CampSiteID)
 ALTER TABLE CampSite_Amenity
-ADD CONSTRAINT AmenityID_PKFK FOREIGN KEY (AmenityID_PKFK)
+ADD CONSTRAINT AmenityID_FK FOREIGN KEY (AmenityID_PKFK)  -- <-- THUY CHANGED AmenityID_PKFK to just AmenityID_FK
  REFERENCES Amenity(AmenityID) -- <-- THUY CHANGED TO AmenityID
 INSERT Amenity (AmenityName) VALUES ('Toilets')    		--campground specific 1
 
