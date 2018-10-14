@@ -96,8 +96,6 @@ INSERT INTO CampSites(CampgroundID, Longitude, Latitude, ImageURL, BaseCost)
 --select * from campgrounds;
 --select * from campsites;
 
-
-
 ---------------------------------------------------------- Ensure tables containing any FK reference exsist beforehand
 
 CREATE TABLE Reservations (
@@ -112,22 +110,20 @@ CREATE TABLE Reservations (
 	FOREIGN KEY (CampsiteID) REFERENCES CampSites (CampsiteID),
 );
 
-SET IDENTITY_INSERT dbo.Reservation ON;
 -- numDays = 4
--- Campsite.BaseCost = $31
+-- Campsite.BaseCost = 31
 -- note, a date where a campsite is checked out, another may check in
 ---- Hmm, how do we account for that in counting the number of days utilized?
----- How about the system knowing if the spot is available
 
+SET IDENTITY_INSERT dbo.Reservation ON;
 DECLARE @CURRENT_DATE as DATE = Convert(DATE, GETDATE());
-INSERT Reservations VALUES ('1','1',@CURRENT_DATE, dateadd(day, 4, @CURRENT_DATE), 4 * $31 );
+INSERT Reservations VALUES ('1','1',@CURRENT_DATE, dateadd(day, 4, @CURRENT_DATE), 4 * 31 );
 set @CURRENT_DATE = dateadd(day, 4, @CURRENT_DATE); -- add 4
-INSERT Reservations VALUES ('2','1',@CURRENT_DATE, dateadd(day, 4, @CURRENT_DATE), 4 * $31 );
+INSERT Reservations VALUES ('2','1',@CURRENT_DATE, dateadd(day, 4, @CURRENT_DATE), 4 * 31 );
 set @CURRENT_DATE = Convert(DATE, GETDATE()); -- set it back
-INSERT Reservations VALUES ('2','2',@CURRENT_DATE,dateadd(day, 4, @CURRENT_DATE), 4 * $31 );
+INSERT Reservations VALUES ('2','2',@CURRENT_DATE, dateadd(day, 4, @CURRENT_DATE), 4 * 31 );
 set @CURRENT_DATE = dateadd(day, 4, @CURRENT_DATE); -- add 4 again
-INSERT Reservations VALUES ('1','2',@CURRENT_DATE, dateadd(day, 4, @CURRENT_DATE), 4 * $31 );
-
+INSERT Reservations VALUES ('1','2',@CURRENT_DATE, dateadd(day, 4, @CURRENT_DATE), 4 * 31 );
 SET IDENTITY_insert dbo.Reservation OFF;
 
 /****************************************************  We decided against this "extraneous" table
