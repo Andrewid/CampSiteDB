@@ -1,4 +1,101 @@
------------------------------------------------------------Andrew's
+--------------------- Andrew moved these. As the following tables reference these
+drop table Campgrounds;
+drop table Campsites;
+
+CREATE TABLE CampGrounds
+(
+	CampgroundID int NOT NULL IDENTITY(1, 1) PRIMARY KEY,
+	CampgroundName nvarchar(255),
+	HostID int,
+	ParkingStalls int,
+	AddressID int,
+	Website nvarchar(1000),
+	StandardCheckoutTime int -- or should we just decide that this is 11 am universally?
+);
+
+CREATE TABLE CampSites
+(
+	CampSiteID int NOT NULL IDENTITY(1, 1) PRIMARY KEY,
+	CampgroundID int, --fk
+	Longitude float,
+	Latitude float,
+	ImageURL nvarchar(1000),
+	BaseCost smallMoney,
+	FOREIGN KEY (CampgroundID) REFERENCES Campgrounds (CampgroundID)
+);
+
+--Campground 1
+INSERT INTO CampGrounds(CampgroundName, HostID, ParkingStalls, AddressID, Website, StandardCheckoutTime) 
+	VALUES('Bridge Bay', 1, 300, 1, 'https://www.nps.gov/yell/planyourvisit/bridgebaycg.htm', '8');
+--Bridge Bay Campground, 260 Bridge Bay Campground, Yellowstone National Park, WY 82190
+
+-- Campsite 1, child of 1
+INSERT INTO CampSites(CampgroundID, Longitude, Latitude, ImageURL, BaseCost) 
+	VALUES(1,  42.706769, -113.6592416, 'https://www.yellowstonenationalparklodges.com/lodgings/campground/bridge-bay-campground/', 25.25);
+
+-- campground 2
+INSERT INTO CampGrounds(CampgroundName, HostID, ParkingStalls, AddressID, Website, StandardCheckoutTime) 
+	VALUES('Madison', 1, 270, 2, 'https://www.yellowstonenationalparklodges.com/lodgings/campground/madison-campground/', 8);
+
+-- campsite 2 of 'ground 2
+INSERT INTO CampSites(CampgroundID, Longitude, Latitude, ImageURL,BaseCost) -- Campsite #2
+	VALUES(2, 4438.725, 11051.687, 'https://ynpres1.xanterra.com/CGI-BIN/LANSAWEB?WEBEVENT+R616E0F8B07058601903A004+RES+ENG', 25.25);
+--Madison Sm Tent-Only Site
+
+-- confused on capacity:                Capacity = how many people
+
+-- Campground 3
+INSERT INTO CampGrounds(CampgroundName, HostID, ParkingStalls, AddressID, Website, StandardCheckoutTime) 
+	VALUES('Canyon', 1, 270, 3, 'https://www.yellowstonenationalparklodges.com/lodgings/campground/canyon-campground/', 8);
+--Canyon Campground, 27 Andesite Ln, Yellowstone National Park, WY 82190
+
+-- Campsite 3 of 'ground 3
+INSERT INTO CampSites(CampgroundID, Longitude, Latitude, ImageURL, BaseCost) 
+	VALUES(3, 4444.118, 11029.17, 'https://ynpres1.xanterra.com/cgi-bin/lansaweb?procfun+rn+resnet+RES+funcparms+UP(A2560):;YCSUM9;052419;1;1;0;010;?/&_ga=2.228702105.423326928.1539208156-2092921698.1539050501', 30.0 );
+
+--select * from campgrounds;
+--select * from campsites;
+----------------------------------------------------------- Users table
+-- We need the address before the user can have the address
+CREATE TABLE Addresses (
+	AddressID int IDENTITY(1, 1) PRIMARY KEY NOT NULL,
+	Street nvarchar(255),
+	State nvarchar(255),
+	Zip nvarChar(255)
+);
+
+CREATE TABLE Users (
+	UserID int IDENTITY(1, 1) PRIMARY KEY NOT NULL,
+	Email varchar(320),
+	Firstname varchar(50),
+	Lastname varchar(50),
+	PhoneNumber varchar(15),
+	Date_of_Birth date,
+	AddressID int NOT NULL,
+	FOREIGN KEY (AddressID) REFERENCES Addresses (AddressID) 
+);
+
+INSERT INTO Addresses(Street, State, Zip)
+	VALUES ('2045 North Waverly Street', 'AZ', '85001')
+
+INSERT INTO Addresses(Street, State, Zip)
+	VALUES ('4307 South Front Street', 'CA', '90001')
+
+INSERT INTO Users(Email, Firstname, Lastname, PhoneNumber, Date_of_Birth, AddressID) 
+	VALUES ('exemail@aol.com', 'Bob', 'Broker', '4354235346', '1992/04/16', 1)
+
+INSERT INTO Users(Email, Firstname, Lastname, PhoneNumber, Date_of_Birth, AddressID) 
+	VALUES ('exe2mail@aol.com', 'Rick', 'Schroder', '8012489534', '1984/11/23', 2)
+
+/*
+SELECT * FROM Users
+SELECT * FROM Addresses
+
+DROP TABLE Users;
+DROP TABLE Addresses;*/
+
+---------------------------------------------------------- Ensure tables containing any FK reference exsist beforehand
+
 CREATE TABLE Reservations (
     ReservationID INT IDENTITY(1,1) PRIMARY KEY NOT NULL,
     UserID INT NOT NULL,            --FK
@@ -6,10 +103,12 @@ CREATE TABLE Reservations (
     CheckIn_Date DATE NOT NULL,
     CheckOut_Date DATE NOT NULL,
     Invoice_Total SMALLMONEY NOT NULL,
-    Valid BIT -- default is 1
+    Valid BIT, -- default is 1
+	FOREIGN KEY (UserID) REFERENCES Users (UserID),
+	FOREIGN KEY (CampsiteID) REFERENCES CampSites (CampsiteID),
 );
 
-SET IDENTITY_insert dbo.Reservation ON;
+SET IDENTITY_INSERT dbo.Reservation ON;
 -- numDays = 4
 -- Campsite.BaseCost = $31
 -- note, a date where a campsite is checked out, another may check in
@@ -22,15 +121,13 @@ INSERT Reservations VALUES ('1','2',dateadd(day, 4, CURRENT_DATE),dateadd(day, 8
 
 SET IDENTITY_insert dbo.Reservation OFF;
 
+/****************************************************  We decided against this "extraneous" table
 CREATE TABLE Campsite_ReservedDates (
-    CampsiteID INT NOT NULL,        --FK
+    CampsiteID INT NOT NULL,
     DayReserved DATE NOT NULL
     Valid BIT -- set to 0 for cancelled, default is 1
 );
-
--- Now, these insert statements for the Campsite_ReservedDates seem to be asking to be procedural 
---- or even triggered.  Not sure how to do those, but I will ask Russ
-
+*/
 -----------------------------------------------------------
 CREATE TABLE Amenity
 (
@@ -38,6 +135,23 @@ CREATE TABLE Amenity
  AmenityName VARCHAR(255) NOT NULL,
  --AmenityDescription VARCHAR(2000) NOT NULL,
 )
+--------------------------------------------------------------- Campground Amenities that all CampSites share
+--------------------------------------------------------------- This is basically a clone of the CampSite Amenity table
+CREATE TABLE CampGround_Amenity
+(
+ CampGroundID_PKFK INT NOT NULL,
+ AmenityID_PKFK INT NOT NULL,
+ Quantity INT NOT NULL,
+ PRIMARY KEY (CampGroundID_PKFK, AmenityID_PKFK)
+)
+ALTER TABLE CampGround_Amenity
+ADD CONSTRAINT CampSiteID_PKFK FOREIGN KEY (CampGroundID_PKFK)
+ REFERENCES CampGround(CampGroundID_PK)
+ALTER TABLE CampGround_Amenity
+ADD CONSTRAINT AmenityID_PKFK FOREIGN KEY (AmenityID_PKFK)
+ REFERENCES Amenity(AmenityID_PK)
+------------------------------------------------------------------- 
+--
 CREATE TABLE CampSite_Amenity
 (
  CampSiteID_PKFK INT NOT NULL,
@@ -51,28 +165,37 @@ ADD CONSTRAINT CampSiteID_PKFK FOREIGN KEY (CampSiteID_PKFK)
 ALTER TABLE CampSite_Amenity
 ADD CONSTRAINT AmenityID_PKFK FOREIGN KEY (AmenityID_PKFK)
  REFERENCES Amenity(AmenityID_PK)
-INSERT Amenity (AmenityName) VALUES ('Toilets')    --campground specific
-INSERT Amenity (AmenityName) VALUES ('Electricity')  --campSite specific
-INSERT Amenity (AmenityName) VALUES ('Fire Ring')   --campSite specific
-INSERT Amenity (AmenityName) VALUES ('Fire Wood')   --campSite specific
-INSERT Amenity (AmenityName) VALUES ('Tables')     --campSite specific
-INSERT Amenity (AmenityName) VALUES ('Sewer Hookups') --campSite specific
-INSERT Amenity (AmenityName) VALUES ('Wifi')      --campground specific
-INSERT Amenity (AmenityName) VALUES ('Hiking Trails') --campground specific
-INSERT Amenity (AmenityName) VALUES ('ATV Trails')   --campground specific
-INSERT Amenity (AmenityName) VALUES ('River')     --campground specific
-INSERT Amenity (AmenityName) VALUES ('Lake')      --campground specific
-INSERT Amenity (AmenityName) VALUES ('Horse Trails')  --campground specific
-INSERT Amenity (AmenityName) VALUES ('Picnicking')   --campground specific
-INSERT Amenity (AmenityName) VALUES ('Fishing')    --campground specific
-INSERT Amenity (AmenityName) VALUES ('Boating')    --campground specific
+INSERT Amenity (AmenityName) VALUES ('Toilets')    		--campground specific 1
+
+INSERT Amenity (AmenityName) VALUES ('Electricity')  	--campSite specific 2
+INSERT Amenity (AmenityName) VALUES ('Fire Ring')   	--campSite specific 3
+INSERT Amenity (AmenityName) VALUES ('Fire Wood')   	--campSite specific 4
+INSERT Amenity (AmenityName) VALUES ('Tables')     		--campSite specific 5
+INSERT Amenity (AmenityName) VALUES ('Sewer Hookups') 	--campSite specific 6
+--
+INSERT Amenity (AmenityName) VALUES ('Wifi')      		--campground specific 7
+INSERT Amenity (AmenityName) VALUES ('Hiking Trails') 	--campground specific 8
+INSERT Amenity (AmenityName) VALUES ('ATV Trails')   	--campground specific 9
+INSERT Amenity (AmenityName) VALUES ('River')     		--campground specific 10
+INSERT Amenity (AmenityName) VALUES ('Lake')      		--campground specific 11
+INSERT Amenity (AmenityName) VALUES ('Horse Trails')  	--campground specific 12
+INSERT Amenity (AmenityName) VALUES ('Picnicking')   	--campground specific 13
+INSERT Amenity (AmenityName) VALUES ('Fishing')    		--campground specific 14
+INSERT Amenity (AmenityName) VALUES ('Boating')    		--campground specific 15
+
 --INSERT Amenity (AmenityName) VALUES ('Max Vehicle Length')
+
+--  If we're going ot move the "campground Specific" values to a Campground Amenities table,
+--   Some of these will just insert into the other Junction Table
+-- Where amenityID is not 2-6
 INSERT CampSite_Amenity (CampSiteID_PKFK, AmenityID_PKFK, Quantity) VALUES ('1', '1', '1')
+
 INSERT CampSite_Amenity (CampSiteID_PKFK, AmenityID_PKFK, Quantity) VALUES ('1', '2', '1')
 INSERT CampSite_Amenity (CampSiteID_PKFK, AmenityID_PKFK, Quantity) VALUES ('1', '3', '1')
 INSERT CampSite_Amenity (CampSiteID_PKFK, AmenityID_PKFK, Quantity) VALUES ('1', '4', '1')
 INSERT CampSite_Amenity (CampSiteID_PKFK, AmenityID_PKFK, Quantity) VALUES ('1', '5', '1')
 INSERT CampSite_Amenity (CampSiteID_PKFK, AmenityID_PKFK, Quantity) VALUES ('1', '6', '1')
+
 INSERT CampSite_Amenity (CampSiteID_PKFK, AmenityID_PKFK, Quantity) VALUES ('1', '7', '1')
 INSERT CampSite_Amenity (CampSiteID_PKFK, AmenityID_PKFK, Quantity) VALUES ('1', '8', '1')
 INSERT CampSite_Amenity (CampSiteID_PKFK, AmenityID_PKFK, Quantity) VALUES ('1', '9', '1')
@@ -81,11 +204,13 @@ INSERT CampSite_Amenity (CampSiteID_PKFK, AmenityID_PKFK, Quantity) VALUES ('1',
 INSERT CampSite_Amenity (CampSiteID_PKFK, AmenityID_PKFK, Quantity) VALUES ('1', '12', '1')
 INSERT CampSite_Amenity (CampSiteID_PKFK, AmenityID_PKFK, Quantity) VALUES ('1', '13', '1')
 INSERT CampSite_Amenity (CampSiteID_PKFK, AmenityID_PKFK, Quantity) VALUES ('2', '1', '1')
+
 INSERT CampSite_Amenity (CampSiteID_PKFK, AmenityID_PKFK, Quantity) VALUES ('2', '2', '1')
 INSERT CampSite_Amenity (CampSiteID_PKFK, AmenityID_PKFK, Quantity) VALUES ('2', '3', '1')
 INSERT CampSite_Amenity (CampSiteID_PKFK, AmenityID_PKFK, Quantity) VALUES ('2', '4', '1')
 INSERT CampSite_Amenity (CampSiteID_PKFK, AmenityID_PKFK, Quantity) VALUES ('2', '5', '1')
 INSERT CampSite_Amenity (CampSiteID_PKFK, AmenityID_PKFK, Quantity) VALUES ('2', '6', '1')
+
 INSERT CampSite_Amenity (CampSiteID_PKFK, AmenityID_PKFK, Quantity) VALUES ('2', '7', '1')
 INSERT CampSite_Amenity (CampSiteID_PKFK, AmenityID_PKFK, Quantity) VALUES ('2', '8', '1')
 INSERT CampSite_Amenity (CampSiteID_PKFK, AmenityID_PKFK, Quantity) VALUES ('2', '9', '1')
@@ -94,93 +219,3 @@ INSERT CampSite_Amenity (CampSiteID_PKFK, AmenityID_PKFK, Quantity) VALUES ('2',
 INSERT CampSite_Amenity (CampSiteID_PKFK, AmenityID_PKFK, Quantity) VALUES ('2', '12', '1')
 INSERT CampSite_Amenity (CampSiteID_PKFK, AmenityID_PKFK, Quantity) VALUES ('2', '13', '1')
 
-
-
-drop table campsites;
-drop table campgrounds;
-
-CREATE TABLE CampSites
-(
-	CampSiteID int NOT NULL IDENTITY(1, 1) PRIMARY KEY,
-	CampgroundID int,
-	Longitude float,
-	Latitude float,
-	ImageURL nvarchar(1000),
-	BaseCost smallMoney
-);
-
-CREATE TABLE CampGrounds
-(
-	CampgroundID int NOT NULL IDENTITY(1, 1) PRIMARY KEY,
-	CampgroundName nvarchar(255),
-	HostID int,
-	ParkingStalls int,
-	AddressID int,
-	Website nvarchar(1000),
-	StandardCheckoutTime int
-
-);
-
-
-INSERT INTO CampGrounds(CampgroundName, HostID, ParkingStalls, AddressID, Website, StandardCheckoutTime) VALUES('Bridge Bay', 1, 300, 1, 'https://www.nps.gov/yell/planyourvisit/bridgebaycg.htm', '8');
---Bridge Bay Campground, 260 Bridge Bay Campground, Yellowstone National Park, WY 82190
-
-INSERT INTO CampSites(CampgroundID, Longitude, Latitude, ImageURL, BaseCost) VALUES(1,  42.706769, -113.6592416, 'https://www.yellowstonenationalparklodges.com/lodgings/campground/bridge-bay-campground/', 25.25);
-
-
-
-INSERT INTO CampGrounds(CampgroundName, HostID, ParkingStalls, AddressID, Website, StandardCheckoutTime) VALUES('Madison', 1, 270, 2, 'https://www.yellowstonenationalparklodges.com/lodgings/campground/madison-campground/', 8);
-
-INSERT INTO CampSites(CampgroundID, Longitude, Latitude, ImageURL,BaseCost) VALUES(2, 4438.725, 11051.687, 'https://ynpres1.xanterra.com/CGI-BIN/LANSAWEB?WEBEVENT+R616E0F8B07058601903A004+RES+ENG', 25.25);
---Madison Sm Tent-Only Site
-
--- confused on capacity:
-
-INSERT INTO CampGrounds(CampgroundName, HostID, ParkingStalls, AddressID, Website, StandardCheckoutTime) VALUES('Canyon', 1, 270, 3, 'https://www.yellowstonenationalparklodges.com/lodgings/campground/canyon-campground/', 8);
---Canyon Campground, 27 Andesite Ln, Yellowstone National Park, WY 82190
-
-
-INSERT INTO CampSites(CampgroundID, Longitude, Latitude, ImageURL, BaseCost) VALUES(3, 4444.118, 11029.17, 'https://ynpres1.xanterra.com/cgi-bin/lansaweb?procfun+rn+resnet+RES+funcparms+UP(A2560):;YCSUM9;052419;1;1;0;010;?/&_ga=2.228702105.423326928.1539208156-2092921698.1539050501', 30.0 );
-
-
-
---select * from campgrounds;
---select * from campsites;
-
-CREATE TABLE Person (
-	UserID int IDENTITY(1, 1) PRIMARY KEY,
-	Email varchar(320),
-	Firstname varchar(50),
-	Lastname varchar(50),
-	PhoneNumber varchar(15),
-	Date_of_Birth date,
-	Addres int NOT NULL
-);
-
-CREATE TABLE Addresses (
-	AddresID int IDENTITY(1, 1) PRIMARY KEY,
-	Street nvarchar(255),
-	State nvarchar(255),
-	Zip nvarChar(255)
-);
-
-INSERT INTO Person(Email, Firstname, Lastname, PhoneNumber, Date_of_Birth, Addres) 
-	VALUES ('exemail@aol.com', 'Bob', 'Broker', '4354235346', '1992/04/16', 1)
-
-INSERT INTO Person(Email, Firstname, Lastname, PhoneNumber, Date_of_Birth, Addres) 
-	VALUES ('exe2mail@aol.com', 'Rick', 'Schroder', '8012489534', '1984/11/23', 2)
-
-INSERT INTO Addresses(Street, State, Zip)
-	VALUES ('2045 North Waverly Street', 'AZ', '85001')
-
-INSERT INTO Addresses(Street, State, Zip)
-	VALUES ('4307 South Front Street', 'CA', '90001')
-
-/*SELECT *
-FROM Person
-
-SELECT *
-FROM Addresses
-
-DROP TABLE Person;
-DROP TABLE Addresses;*/
