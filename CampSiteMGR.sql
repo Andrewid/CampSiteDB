@@ -140,7 +140,7 @@ CREATE TABLE Campsite_ReservedDates (
 -----------------------------------------------------------
 CREATE TABLE Amenity
 (
- GenreId_PK INT IDENTITY NOT NULL PRIMARY KEY,
+ AmenityID INT IDENTITY NOT NULL PRIMARY KEY, -- <---- THUY CHANGED TO AmenityID
  AmenityName VARCHAR(255) NOT NULL,
  --AmenityDescription VARCHAR(2000) NOT NULL,
 )
@@ -155,10 +155,10 @@ CREATE TABLE CampGround_Amenity
 )
 ALTER TABLE CampGround_Amenity
 ADD CONSTRAINT CampSiteID_PKFK FOREIGN KEY (CampGroundID_PKFK)
- REFERENCES CampGround(CampGroundID_PK)
+ REFERENCES CampGrounds(CampGroundID)
 ALTER TABLE CampGround_Amenity
 ADD CONSTRAINT AmenityID_PKFK FOREIGN KEY (AmenityID_PKFK)
- REFERENCES Amenity(AmenityID_PK)
+ REFERENCES Amenity(AmenityID)  -- <--- THUY CHANGED TO AmenityID
 ------------------------------------------------------------------- 
 --
 CREATE TABLE CampSite_Amenity
@@ -170,10 +170,10 @@ CREATE TABLE CampSite_Amenity
 )
 ALTER TABLE CampSite_Amenity
 ADD CONSTRAINT CampSiteID_PKFK FOREIGN KEY (CampSiteID_PKFK)
- REFERENCES CampSite(CampSiteID_PK)
+ REFERENCES CampSites(CampSiteID)
 ALTER TABLE CampSite_Amenity
 ADD CONSTRAINT AmenityID_PKFK FOREIGN KEY (AmenityID_PKFK)
- REFERENCES Amenity(AmenityID_PK)
+ REFERENCES Amenity(AmenityID) -- <-- THUY CHANGED TO AmenityID
 INSERT Amenity (AmenityName) VALUES ('Toilets')    		--campground specific 1
 
 INSERT Amenity (AmenityName) VALUES ('Electricity')  	--campSite specific 2
