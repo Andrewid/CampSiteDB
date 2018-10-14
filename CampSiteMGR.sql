@@ -1,3 +1,14 @@
+-- DROP TABLES (MUST BE IN THIS ORDER)
+DROP TABLE Reservations;
+DROP TABLE CampSite_Amenity;
+DROP TABLE CampGround_Amenity;
+DROP TABLE Amenity;
+DROP TABLE CampSites;
+DROP TABLE CampGrounds;
+DROP TABLE Users;
+DROP TABLE Addresses;
+
+
 --------------------- Andrew moved these. As the following tables reference these
 
 ----------------------------------------------------------- Users table
@@ -39,8 +50,6 @@ SELECT * FROM Addresses
 DROP TABLE Users;
 DROP TABLE Addresses;*/
 
-drop table Campgrounds;
-drop table Campsites;
 
 CREATE TABLE CampGrounds
 (
