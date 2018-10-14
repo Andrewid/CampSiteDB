@@ -99,15 +99,15 @@ INSERT INTO CampSites(CampgroundID, Longitude, Latitude, ImageURL, BaseCost)
 ---------------------------------------------------------- Ensure tables containing any FK reference exsist beforehand
 
 CREATE TABLE Reservations (
-    ReservationID INT IDENTITY(1,1) PRIMARY KEY NOT NULL,
-    UserID INT NOT NULL,            --FK
-    CampsiteID INT NOT NULL,        --FK
-    CheckIn_Date DATE NOT NULL,
-    CheckOut_Date DATE NOT NULL,
-    Invoice_Total SMALLMONEY NOT NULL,
-    Valid BIT, -- default is 1
-	FOREIGN KEY (UserID) REFERENCES Users (UserID),
-	FOREIGN KEY (CampsiteID) REFERENCES CampSites (CampsiteID),
+   ReservationID INT IDENTITY(1,1) PRIMARY KEY NOT NULL,
+   UserID INT NOT NULL,            --FK
+   CampsiteID INT NOT NULL,        --FK
+   CheckIn_Date DATE NOT NULL,
+   CheckOut_Date DATE NOT NULL,
+   Invoice_Total SMALLMONEY NOT NULL,
+   Valid BIT DEFAULT 1,
+    FOREIGN KEY (UserID) REFERENCES Users (UserID),
+    FOREIGN KEY (CampsiteID) REFERENCES CampSites (CampsiteID)
 );
 
 -- numDays = 4
@@ -136,7 +136,7 @@ CREATE TABLE Campsite_ReservedDates (
 -----------------------------------------------------------
 CREATE TABLE Amenity
 (
- GenreId_PK INT IDENTITY NOT NULL PRIMARY KEY,
+ AmenityID INT IDENTITY NOT NULL PRIMARY KEY, -- <---- THUY CHANGED TO AmenityID
  AmenityName VARCHAR(255) NOT NULL,
  --AmenityDescription VARCHAR(2000) NOT NULL,
 )
@@ -151,10 +151,10 @@ CREATE TABLE CampGround_Amenity
 )
 ALTER TABLE CampGround_Amenity
 ADD CONSTRAINT CampSiteID_PKFK FOREIGN KEY (CampGroundID_PKFK)
- REFERENCES CampGround(CampGroundID_PK)
+ REFERENCES CampGrounds(CampGroundID)
 ALTER TABLE CampGround_Amenity
 ADD CONSTRAINT AmenityID_PKFK FOREIGN KEY (AmenityID_PKFK)
- REFERENCES Amenity(AmenityID_PK)
+ REFERENCES Amenity(AmenityID)  -- <--- THUY CHANGED TO AmenityID
 ------------------------------------------------------------------- 
 --
 CREATE TABLE CampSite_Amenity
@@ -165,11 +165,11 @@ CREATE TABLE CampSite_Amenity
  PRIMARY KEY (CampSiteID_PKFK, AmenityID_PKFK)
 )
 ALTER TABLE CampSite_Amenity
-ADD CONSTRAINT CampSiteID_PKFK FOREIGN KEY (CampSiteID_PKFK)
- REFERENCES CampSite(CampSiteID_PK)
+ADD CONSTRAINT CampSiteID_FK FOREIGN KEY (CampSiteID_PKFK) -- <-- THUY CHANGED CampSiteID_PKFK to just CampSiteID_FK
+ REFERENCES CampSites(CampSiteID)
 ALTER TABLE CampSite_Amenity
-ADD CONSTRAINT AmenityID_PKFK FOREIGN KEY (AmenityID_PKFK)
- REFERENCES Amenity(AmenityID_PK)
+ADD CONSTRAINT AmenityID_FK FOREIGN KEY (AmenityID_PKFK)  -- <-- THUY CHANGED AmenityID_PKFK to just AmenityID_FK
+ REFERENCES Amenity(AmenityID) -- <-- THUY CHANGED TO AmenityID
 INSERT Amenity (AmenityName) VALUES ('Toilets')    		--campground specific 1
 
 INSERT Amenity (AmenityName) VALUES ('Electricity')  	--campSite specific 2
