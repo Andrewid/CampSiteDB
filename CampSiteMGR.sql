@@ -99,15 +99,15 @@ INSERT INTO CampSites(CampgroundID, Longitude, Latitude, ImageURL, BaseCost)
 ---------------------------------------------------------- Ensure tables containing any FK reference exsist beforehand
 
 CREATE TABLE Reservations (
-    ReservationID INT IDENTITY(1,1) PRIMARY KEY NOT NULL,
-    UserID INT NOT NULL,            --FK
-    CampsiteID INT NOT NULL,        --FK
-    CheckIn_Date DATE NOT NULL,
-    CheckOut_Date DATE NOT NULL,
-    Invoice_Total SMALLMONEY NOT NULL,
-    Valid BIT, -- default is 1
-	FOREIGN KEY (UserID) REFERENCES Users (UserID),
-	FOREIGN KEY (CampsiteID) REFERENCES CampSites (CampsiteID),
+   ReservationID INT IDENTITY(1,1) PRIMARY KEY NOT NULL,
+   UserID INT NOT NULL,            --FK
+   CampsiteID INT NOT NULL,        --FK
+   CheckIn_Date DATE NOT NULL,
+   CheckOut_Date DATE NOT NULL,
+   Invoice_Total SMALLMONEY NOT NULL,
+   Valid BIT DEFAULT 1,
+    FOREIGN KEY (UserID) REFERENCES Users (UserID),
+    FOREIGN KEY (CampsiteID) REFERENCES CampSites (CampsiteID)
 );
 
 -- numDays = 4
