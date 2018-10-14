@@ -118,10 +118,15 @@ SET IDENTITY_INSERT dbo.Reservation ON;
 -- note, a date where a campsite is checked out, another may check in
 ---- Hmm, how do we account for that in counting the number of days utilized?
 ---- How about the system knowing if the spot is available
-INSERT Reservations VALUES ('1','1',CURRENT_DATE,dateadd(day, 4, CURRENT_DATE), 4 * $31 )
-INSERT Reservations VALUES ('2','1',dateadd(day, 4, CURRENT_DATE),dateadd(day, 8, CURRENT_DATE), 4 * $31 )
-INSERT Reservations VALUES ('2','2',CURRENT_DATE,dateadd(day, 4, CURRENT_DATE), 4 * $31 )
-INSERT Reservations VALUES ('1','2',dateadd(day, 4, CURRENT_DATE),dateadd(day, 8, CURRENT_DATE), 4 * $31 )
+
+DECLARE @CURRENT_DATE as DATE = Convert(DATE, GETDATE());
+INSERT Reservations VALUES ('1','1',@CURRENT_DATE, dateadd(day, 4, @CURRENT_DATE), 4 * $31 );
+set @CURRENT_DATE = dateadd(day, 4, @CURRENT_DATE); -- add 4
+INSERT Reservations VALUES ('2','1',@CURRENT_DATE, dateadd(day, 4, @CURRENT_DATE), 4 * $31 );
+set @CURRENT_DATE = Convert(DATE, GETDATE()); -- set it back
+INSERT Reservations VALUES ('2','2',@CURRENT_DATE,dateadd(day, 4, @CURRENT_DATE), 4 * $31 );
+set @CURRENT_DATE = dateadd(day, 4, @CURRENT_DATE); -- add 4 again
+INSERT Reservations VALUES ('1','2',@CURRENT_DATE, dateadd(day, 4, @CURRENT_DATE), 4 * $31 );
 
 SET IDENTITY_insert dbo.Reservation OFF;
 
