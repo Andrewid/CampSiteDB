@@ -1,4 +1,44 @@
 --------------------- Andrew moved these. As the following tables reference these
+
+----------------------------------------------------------- Users table
+-- We need the address before the user can have the address
+CREATE TABLE Addresses (
+	AddressID int IDENTITY(1, 1) PRIMARY KEY NOT NULL,
+	Street nvarchar(255),
+	State nvarchar(255),
+	Zip nvarChar(255)
+);
+
+CREATE TABLE Users (
+	UserID int IDENTITY(1, 1) PRIMARY KEY NOT NULL,
+	Email varchar(320),
+	Firstname varchar(50),
+	Lastname varchar(50),
+	PhoneNumber varchar(15),
+	Date_of_Birth date,
+	AddressID int NOT NULL,
+	FOREIGN KEY (AddressID) REFERENCES Addresses (AddressID) 
+);
+
+INSERT INTO Addresses(Street, State, Zip)
+	VALUES ('2045 North Waverly Street', 'AZ', '85001')
+
+INSERT INTO Addresses(Street, State, Zip)
+	VALUES ('4307 South Front Street', 'CA', '90001')
+
+INSERT INTO Users(Email, Firstname, Lastname, PhoneNumber, Date_of_Birth, AddressID) 
+	VALUES ('exemail@aol.com', 'Bob', 'Broker', '4354235346', '1992/04/16', 1)
+
+INSERT INTO Users(Email, Firstname, Lastname, PhoneNumber, Date_of_Birth, AddressID) 
+	VALUES ('exe2mail@aol.com', 'Rick', 'Schroder', '8012489534', '1984/11/23', 2)
+
+/*
+SELECT * FROM Users
+SELECT * FROM Addresses
+
+DROP TABLE Users;
+DROP TABLE Addresses;*/
+
 drop table Campgrounds;
 drop table Campsites;
 
@@ -6,7 +46,7 @@ CREATE TABLE CampGrounds
 (
 	CampgroundID int NOT NULL IDENTITY(1, 1) PRIMARY KEY,
 	CampgroundName nvarchar(255),
-	HostID int,
+	HostID int FOREIGN KEY REFERENCES Users(UserID),
 	ParkingStalls int,
 	AddressID int,
 	Website nvarchar(1000),
@@ -55,44 +95,8 @@ INSERT INTO CampSites(CampgroundID, Longitude, Latitude, ImageURL, BaseCost)
 
 --select * from campgrounds;
 --select * from campsites;
------------------------------------------------------------ Users table
--- We need the address before the user can have the address
-CREATE TABLE Addresses (
-	AddressID int IDENTITY(1, 1) PRIMARY KEY NOT NULL,
-	Street nvarchar(255),
-	State nvarchar(255),
-	Zip nvarChar(255)
-);
 
-CREATE TABLE Users (
-	UserID int IDENTITY(1, 1) PRIMARY KEY NOT NULL,
-	Email varchar(320),
-	Firstname varchar(50),
-	Lastname varchar(50),
-	PhoneNumber varchar(15),
-	Date_of_Birth date,
-	AddressID int NOT NULL,
-	FOREIGN KEY (AddressID) REFERENCES Addresses (AddressID) 
-);
 
-INSERT INTO Addresses(Street, State, Zip)
-	VALUES ('2045 North Waverly Street', 'AZ', '85001')
-
-INSERT INTO Addresses(Street, State, Zip)
-	VALUES ('4307 South Front Street', 'CA', '90001')
-
-INSERT INTO Users(Email, Firstname, Lastname, PhoneNumber, Date_of_Birth, AddressID) 
-	VALUES ('exemail@aol.com', 'Bob', 'Broker', '4354235346', '1992/04/16', 1)
-
-INSERT INTO Users(Email, Firstname, Lastname, PhoneNumber, Date_of_Birth, AddressID) 
-	VALUES ('exe2mail@aol.com', 'Rick', 'Schroder', '8012489534', '1984/11/23', 2)
-
-/*
-SELECT * FROM Users
-SELECT * FROM Addresses
-
-DROP TABLE Users;
-DROP TABLE Addresses;*/
 
 ---------------------------------------------------------- Ensure tables containing any FK reference exsist beforehand
 
