@@ -126,13 +126,13 @@ CREATE TABLE Reservations (
 
 SET IDENTITY_INSERT dbo.Reservation ON;
 DECLARE @CURRENT_DATE as DATE = Convert(DATE, GETDATE());
-INSERT Reservations VALUES ('1','1',@CURRENT_DATE, dateadd(day, 4, @CURRENT_DATE), 4 * 31 );
+INSERT Reservations VALUES ('1','1',@CURRENT_DATE, dateadd(day, 4, @CURRENT_DATE), 4 * 31, 1 );
 set @CURRENT_DATE = dateadd(day, 4, @CURRENT_DATE); -- add 4
-INSERT Reservations VALUES ('2','1',@CURRENT_DATE, dateadd(day, 4, @CURRENT_DATE), 4 * 31 );
+INSERT Reservations VALUES ('2','1',@CURRENT_DATE, dateadd(day, 4, @CURRENT_DATE), 4 * 31, 1 );
 set @CURRENT_DATE = Convert(DATE, GETDATE()); -- set it back
-INSERT Reservations VALUES ('2','2',@CURRENT_DATE, dateadd(day, 4, @CURRENT_DATE), 4 * 31 );
+INSERT Reservations VALUES ('2','2',@CURRENT_DATE, dateadd(day, 4, @CURRENT_DATE), 4 * 31, 1 );
 set @CURRENT_DATE = dateadd(day, 4, @CURRENT_DATE); -- add 4 again
-INSERT Reservations VALUES ('1','2',@CURRENT_DATE, dateadd(day, 4, @CURRENT_DATE), 4 * 31 );
+INSERT Reservations VALUES ('1','2',@CURRENT_DATE, dateadd(day, 4, @CURRENT_DATE), 4 * 31, 1 );
 SET IDENTITY_insert dbo.Reservation OFF;
 
 /****************************************************  We decided against this "extraneous" table
