@@ -127,11 +127,11 @@ SET IDENTITY_INSERT dbo.Reservations ON;
 -- yyyy-mm-dd
 
 INSERT Reservations (ReservationID, UserID, CampsiteID, CheckIn_Date, CheckOut_Date, Invoice_Total)
- 			VALUES  (1, 1, 1, 2018-07-11,  2018-07-15, 4, 4 * 31);
+ 			VALUES  (1, 1, 1, '2018-07-11',  '2018-07-15', 4 * 31);
 INSERT Reservations (ReservationID, UserID, CampsiteID, CheckIn_Date, CheckOut_Date, Invoice_Total)
- 			VALUES  (2, 2, 1, 2018-08-11,  2018-08-16, 5, 5 * 31);
+ 			VALUES  (2, 2, 1, '2018-08-11',  '2018-08-16', 5 * 31);
 INSERT Reservations (ReservationID, UserID, CampsiteID, CheckIn_Date, CheckOut_Date, Invoice_Total)
- 			VALUES  (3, 1, 2, 2018-09-11,  2018-09-17, 6, 6 * 31);
+ 			VALUES  (3, 1, 2, '2018-09-11',  '2018-09-17', 6 * 31);
 
 DECLARE @CURRENT_DATE as DATE = Convert(DATE, GETDATE());
 INSERT Reservations (ReservationID, UserID, CampsiteID, CheckIn_Date, CheckOut_Date, Invoice_Total)
