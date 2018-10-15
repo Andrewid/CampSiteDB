@@ -107,15 +107,15 @@ INSERT INTO CampSites(CampgroundID, Longitude, Latitude, ImageURL, BaseCost)
 ---------------------------------------------------------- Ensure tables containing any FK reference exsist beforehand
 
 CREATE TABLE Reservations (
-   ReservationID INT IDENTITY(1,1) PRIMARY KEY NOT NULL,
-   UserID INT NOT NULL,            --FK
-   CampsiteID INT NOT NULL,        --FK
-   CheckIn_Date DATE NOT NULL,
-   CheckOut_Date DATE NOT NULL,
-   Invoice_Total SMALLMONEY NOT NULL,
-   Valid BIT DEFAULT 1,
-    FOREIGN KEY (UserID) REFERENCES Users (UserID),
-    FOREIGN KEY (CampsiteID) REFERENCES CampSites (CampsiteID)
+	ReservationID	INT IDENTITY(1,1) PRIMARY KEY NOT NULL,
+	UserID			INT NOT NULL,            --FK
+	CampsiteID		INT NOT NULL,        --FK
+	CheckIn_Date	DATE NOT NULL,
+	CheckOut_Date	DATE NOT NULL,
+	Invoice_Total	SMALLMONEY NOT NULL, -- or decimal?
+	Valid			BIT DEFAULT 1,
+	FOREIGN KEY (UserID) REFERENCES Users (UserID),
+	FOREIGN KEY (CampsiteID) REFERENCES CampSites (CampsiteID)
 );
 
 -- numDays = 4
@@ -219,7 +219,6 @@ INSERT Amenity (AmenityName) VALUES ('Boating')    		--campground specific 15
 --  If we're going ot move the "campground Specific" values to a Campground Amenities table,
 --   Some of these will just insert into the other Junction Table
 -- Where amenityID is not 2-6
-INSERT CampSite_Amenity (CampSiteID_PKFK, AmenityID_PKFK, Quantity) VALUES ('1', '1', '1')
 
 INSERT CampSite_Amenity (CampSiteID_PKFK, AmenityID_PKFK, Quantity) VALUES ('1', '2', '1')
 INSERT CampSite_Amenity (CampSiteID_PKFK, AmenityID_PKFK, Quantity) VALUES ('1', '3', '1')
@@ -227,6 +226,14 @@ INSERT CampSite_Amenity (CampSiteID_PKFK, AmenityID_PKFK, Quantity) VALUES ('1',
 INSERT CampSite_Amenity (CampSiteID_PKFK, AmenityID_PKFK, Quantity) VALUES ('1', '5', '1')
 INSERT CampSite_Amenity (CampSiteID_PKFK, AmenityID_PKFK, Quantity) VALUES ('1', '6', '1')
 
+INSERT CampSite_Amenity (CampSiteID_PKFK, AmenityID_PKFK, Quantity) VALUES ('2', '2', '1')
+INSERT CampSite_Amenity (CampSiteID_PKFK, AmenityID_PKFK, Quantity) VALUES ('2', '3', '1')
+INSERT CampSite_Amenity (CampSiteID_PKFK, AmenityID_PKFK, Quantity) VALUES ('2', '4', '1')
+INSERT CampSite_Amenity (CampSiteID_PKFK, AmenityID_PKFK, Quantity) VALUES ('2', '5', '1')
+INSERT CampSite_Amenity (CampSiteID_PKFK, AmenityID_PKFK, Quantity) VALUES ('2', '6', '1')
+
+---  migrate these to CampGround_Amenity
+INSERT CampSite_Amenity (CampSiteID_PKFK, AmenityID_PKFK, Quantity) VALUES ('1', '1', '1')
 INSERT CampSite_Amenity (CampSiteID_PKFK, AmenityID_PKFK, Quantity) VALUES ('1', '7', '1')
 INSERT CampSite_Amenity (CampSiteID_PKFK, AmenityID_PKFK, Quantity) VALUES ('1', '8', '1')
 INSERT CampSite_Amenity (CampSiteID_PKFK, AmenityID_PKFK, Quantity) VALUES ('1', '9', '1')
@@ -236,12 +243,6 @@ INSERT CampSite_Amenity (CampSiteID_PKFK, AmenityID_PKFK, Quantity) VALUES ('1',
 INSERT CampSite_Amenity (CampSiteID_PKFK, AmenityID_PKFK, Quantity) VALUES ('1', '13', '1')
 INSERT CampSite_Amenity (CampSiteID_PKFK, AmenityID_PKFK, Quantity) VALUES ('2', '1', '1')
 
-INSERT CampSite_Amenity (CampSiteID_PKFK, AmenityID_PKFK, Quantity) VALUES ('2', '2', '1')
-INSERT CampSite_Amenity (CampSiteID_PKFK, AmenityID_PKFK, Quantity) VALUES ('2', '3', '1')
-INSERT CampSite_Amenity (CampSiteID_PKFK, AmenityID_PKFK, Quantity) VALUES ('2', '4', '1')
-INSERT CampSite_Amenity (CampSiteID_PKFK, AmenityID_PKFK, Quantity) VALUES ('2', '5', '1')
-INSERT CampSite_Amenity (CampSiteID_PKFK, AmenityID_PKFK, Quantity) VALUES ('2', '6', '1')
-
 INSERT CampSite_Amenity (CampSiteID_PKFK, AmenityID_PKFK, Quantity) VALUES ('2', '7', '1')
 INSERT CampSite_Amenity (CampSiteID_PKFK, AmenityID_PKFK, Quantity) VALUES ('2', '8', '1')
 INSERT CampSite_Amenity (CampSiteID_PKFK, AmenityID_PKFK, Quantity) VALUES ('2', '9', '1')
@@ -249,4 +250,3 @@ INSERT CampSite_Amenity (CampSiteID_PKFK, AmenityID_PKFK, Quantity) VALUES ('2',
 INSERT CampSite_Amenity (CampSiteID_PKFK, AmenityID_PKFK, Quantity) VALUES ('2', '11', '1')
 INSERT CampSite_Amenity (CampSiteID_PKFK, AmenityID_PKFK, Quantity) VALUES ('2', '12', '1')
 INSERT CampSite_Amenity (CampSiteID_PKFK, AmenityID_PKFK, Quantity) VALUES ('2', '13', '1')
-
