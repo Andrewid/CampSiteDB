@@ -124,16 +124,23 @@ CREATE TABLE Reservations (
 -- note, a date where a campsite is checked out, another may check in
 ---- Hmm, how do we account for that in counting the number of days utilized?
 
-SET IDENTITY_INSERT dbo.Reservation ON;
+SET IDENTITY_INSERT dbo.Reservations ON;
 DECLARE @CURRENT_DATE as DATE = Convert(DATE, GETDATE());
-INSERT Reservations VALUES ('1','1',@CURRENT_DATE, dateadd(day, 4, @CURRENT_DATE), 4 * 31, 1 );
-set @CURRENT_DATE = dateadd(day, 4, @CURRENT_DATE); -- add 4
-INSERT Reservations VALUES ('2','1',@CURRENT_DATE, dateadd(day, 4, @CURRENT_DATE), 4 * 31, 1 );
+INSERT Reservations (ReservationID, UserID, CampsiteID, CheckIn_Date, CheckOut_Date, Invoice_Total)
+ VALUES (1, 1,1,Convert(DATE, GETDATE()), dateadd(day, 4, Convert(DATE, GETDATE())), 4 * 31);
+
+set @CURRENT_DATE = dateadd(day, 4, @CURRENT_DATE); -- add 
+INSERT Reservations (ReservationID, UserID, CampsiteID, CheckIn_Date, CheckOut_Date, Invoice_Total)
+VALUES (2, 2,1,@CURRENT_DATE, dateadd(day, 4, @CURRENT_DATE), 4 * 31);
+
 set @CURRENT_DATE = Convert(DATE, GETDATE()); -- set it back
-INSERT Reservations VALUES ('2','2',@CURRENT_DATE, dateadd(day, 4, @CURRENT_DATE), 4 * 31, 1 );
+INSERT Reservations (ReservationID, UserID, CampsiteID, CheckIn_Date, CheckOut_Date, Invoice_Total)
+VALUES (3, 2,2,@CURRENT_DATE, dateadd(day, 4, @CURRENT_DATE), 4 * 31);
+
 set @CURRENT_DATE = dateadd(day, 4, @CURRENT_DATE); -- add 4 again
-INSERT Reservations VALUES ('1','2',@CURRENT_DATE, dateadd(day, 4, @CURRENT_DATE), 4 * 31, 1 );
-SET IDENTITY_insert dbo.Reservation OFF;
+INSERT Reservations (ReservationID, UserID, CampsiteID, CheckIn_Date, CheckOut_Date, Invoice_Total)
+VALUES (4, 1,2,@CURRENT_DATE, dateadd(day, 4, @CURRENT_DATE), 4 * 31);
+SET IDENTITY_insert dbo.Reservations OFF;
 
 /****************************************************  We decided against this "extraneous" table
 CREATE TABLE Campsite_ReservedDates (
