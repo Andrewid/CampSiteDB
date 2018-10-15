@@ -91,7 +91,6 @@ INSERT INTO CampSites(CampgroundID, Longitude, Latitude, ImageURL,BaseCost) -- C
 	VALUES(2, 4438.725, 11051.687, 'https://ynpres1.xanterra.com/CGI-BIN/LANSAWEB?WEBEVENT+R616E0F8B07058601903A004+RES+ENG', 25.25);
 --Madison Sm Tent-Only Site
 
--- confused on capacity:                Capacity = how many people
 
 -- Campground 3
 INSERT INTO CampGrounds(CampgroundName, HostID, ParkingStalls, AddressID, Website, StandardCheckoutTime) 
@@ -126,6 +125,7 @@ CREATE TABLE Reservations (
 
 SET IDENTITY_INSERT dbo.Reservations ON;
 DECLARE @CURRENT_DATE as DATE = Convert(DATE, GETDATE());
+
 INSERT Reservations (ReservationID, UserID, CampsiteID, CheckIn_Date, CheckOut_Date, Invoice_Total)
  VALUES (1, 1,1,Convert(DATE, GETDATE()), dateadd(day, 4, Convert(DATE, GETDATE())), 4 * 31);
 
@@ -140,6 +140,7 @@ VALUES (3, 2,2,@CURRENT_DATE, dateadd(day, 4, @CURRENT_DATE), 4 * 31);
 set @CURRENT_DATE = dateadd(day, 4, @CURRENT_DATE); -- add 4 again
 INSERT Reservations (ReservationID, UserID, CampsiteID, CheckIn_Date, CheckOut_Date, Invoice_Total)
 VALUES (4, 1,2,@CURRENT_DATE, dateadd(day, 4, @CURRENT_DATE), 4 * 31);
+
 SET IDENTITY_insert dbo.Reservations OFF;
 
 /****************************************************  We decided against this "extraneous" table
