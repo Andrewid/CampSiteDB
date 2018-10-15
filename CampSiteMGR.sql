@@ -124,22 +124,31 @@ CREATE TABLE Reservations (
 ---- Hmm, how do we account for that in counting the number of days utilized?
 
 SET IDENTITY_INSERT dbo.Reservations ON;
-DECLARE @CURRENT_DATE as DATE = Convert(DATE, GETDATE());
+-- yyyy-mm-dd
 
 INSERT Reservations (ReservationID, UserID, CampsiteID, CheckIn_Date, CheckOut_Date, Invoice_Total)
- VALUES (1, 1,1,Convert(DATE, GETDATE()), dateadd(day, 4, Convert(DATE, GETDATE())), 4 * 31);
+ 			VALUES  (1, 1, 1, 2018-07-11,  2018-07-15, 4, 4 * 31);
+INSERT Reservations (ReservationID, UserID, CampsiteID, CheckIn_Date, CheckOut_Date, Invoice_Total)
+ 			VALUES  (2, 2, 1, 2018-08-11,  2018-08-16, 5, 5 * 31);
+INSERT Reservations (ReservationID, UserID, CampsiteID, CheckIn_Date, CheckOut_Date, Invoice_Total)
+ 			VALUES  (3, 1, 2, 2018-09-11,  2018-09-17, 6, 6 * 31);
+
+DECLARE @CURRENT_DATE as DATE = Convert(DATE, GETDATE());
+INSERT Reservations (ReservationID, UserID, CampsiteID, CheckIn_Date, CheckOut_Date, Invoice_Total)
+ VALUES (4, 1,1,Convert(DATE, GETDATE()), dateadd(day, 4, Convert(DATE, GETDATE())), 4 * 31);
 
 set @CURRENT_DATE = dateadd(day, 4, @CURRENT_DATE); -- add 
 INSERT Reservations (ReservationID, UserID, CampsiteID, CheckIn_Date, CheckOut_Date, Invoice_Total)
-VALUES (2, 2,1,@CURRENT_DATE, dateadd(day, 4, @CURRENT_DATE), 4 * 31);
+VALUES (5, 2,1,@CURRENT_DATE, dateadd(day, 4, @CURRENT_DATE), 4 * 31);
 
 set @CURRENT_DATE = Convert(DATE, GETDATE()); -- set it back
 INSERT Reservations (ReservationID, UserID, CampsiteID, CheckIn_Date, CheckOut_Date, Invoice_Total)
-VALUES (3, 2,2,@CURRENT_DATE, dateadd(day, 4, @CURRENT_DATE), 4 * 31);
+VALUES (6, 2,2,@CURRENT_DATE, dateadd(day, 4, @CURRENT_DATE), 4 * 31);
 
 set @CURRENT_DATE = dateadd(day, 4, @CURRENT_DATE); -- add 4 again
 INSERT Reservations (ReservationID, UserID, CampsiteID, CheckIn_Date, CheckOut_Date, Invoice_Total)
-VALUES (4, 1,2,@CURRENT_DATE, dateadd(day, 4, @CURRENT_DATE), 4 * 31);
+VALUES (7, 1,2,@CURRENT_DATE, dateadd(day, 4, @CURRENT_DATE), 4 * 31);
+
 
 SET IDENTITY_insert dbo.Reservations OFF;
 
