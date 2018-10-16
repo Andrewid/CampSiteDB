@@ -163,8 +163,7 @@ CREATE TABLE Campsite_ReservedDates (
 CREATE TABLE Amenity
 (
  AmenityID INT IDENTITY NOT NULL PRIMARY KEY, -- <---- THUY CHANGED TO AmenityID
- AmenityName VARCHAR(255) NOT NULL,
- --AmenityDescription VARCHAR(2000) NOT NULL,
+ AmenityName VARCHAR(255) NOT NULL
 )
 --------------------------------------------------------------- Campground Amenities that all CampSites share
 --------------------------------------------------------------- This is basically a clone of the CampSite Amenity table
@@ -181,8 +180,6 @@ ADD CONSTRAINT CampSiteID_PKFK FOREIGN KEY (CampGroundID_PKFK)
 ALTER TABLE CampGround_Amenity
 ADD CONSTRAINT AmenityID_PKFK FOREIGN KEY (AmenityID_PKFK)
  REFERENCES Amenity(AmenityID)  -- <--- THUY CHANGED TO AmenityID
-------------------------------------------------------------------- 
---
 CREATE TABLE CampSite_Amenity
 (
  CampSiteID_PKFK INT NOT NULL,
@@ -196,57 +193,59 @@ ADD CONSTRAINT CampSiteID_FK FOREIGN KEY (CampSiteID_PKFK) -- <-- THUY CHANGED C
 ALTER TABLE CampSite_Amenity
 ADD CONSTRAINT AmenityID_FK FOREIGN KEY (AmenityID_PKFK)  -- <-- THUY CHANGED AmenityID_PKFK to just AmenityID_FK
  REFERENCES Amenity(AmenityID) -- <-- THUY CHANGED TO AmenityID
-INSERT Amenity (AmenityName) VALUES ('Toilets')    		--campground specific 1
-
-INSERT Amenity (AmenityName) VALUES ('Electricity')  	--campSite specific 2
-INSERT Amenity (AmenityName) VALUES ('Fire Ring')   	--campSite specific 3
-INSERT Amenity (AmenityName) VALUES ('Fire Wood')   	--campSite specific 4
-INSERT Amenity (AmenityName) VALUES ('Tables')     		--campSite specific 5
-INSERT Amenity (AmenityName) VALUES ('Sewer Hookups') 	--campSite specific 6
+INSERT Amenity (AmenityName) VALUES ('Toilets')         --campground specific 1
+INSERT Amenity (AmenityName) VALUES ('Electricity')     --campSite specific 2
+INSERT Amenity (AmenityName) VALUES ('Fire Ring')       --campSite specific 3
+INSERT Amenity (AmenityName) VALUES ('Fire Wood')       --campSite specific 4
+INSERT Amenity (AmenityName) VALUES ('Tables')          --campSite specific 5
+INSERT Amenity (AmenityName) VALUES ('Sewer Hookups')   --campSite specific 6
 --
-INSERT Amenity (AmenityName) VALUES ('Wifi')      		--campground specific 7
-INSERT Amenity (AmenityName) VALUES ('Hiking Trails') 	--campground specific 8
-INSERT Amenity (AmenityName) VALUES ('ATV Trails')   	--campground specific 9
-INSERT Amenity (AmenityName) VALUES ('River')     		--campground specific 10
-INSERT Amenity (AmenityName) VALUES ('Lake')      		--campground specific 11
-INSERT Amenity (AmenityName) VALUES ('Horse Trails')  	--campground specific 12
-INSERT Amenity (AmenityName) VALUES ('Picnicking')   	--campground specific 13
-INSERT Amenity (AmenityName) VALUES ('Fishing')    		--campground specific 14
-INSERT Amenity (AmenityName) VALUES ('Boating')    		--campground specific 15
-
---INSERT Amenity (AmenityName) VALUES ('Max Vehicle Length')
-
---  If we're going ot move the "campground Specific" values to a Campground Amenities table,
---   Some of these will just insert into the other Junction Table
--- Where amenityID is not 2-6
-
+INSERT Amenity (AmenityName) VALUES ('Wifi')            --campground specific 7
+INSERT Amenity (AmenityName) VALUES ('Hiking Trails')   --campground specific 8
+INSERT Amenity (AmenityName) VALUES ('ATV Trails')      --campground specific 9
+INSERT Amenity (AmenityName) VALUES ('River')           --campground specific 10
+INSERT Amenity (AmenityName) VALUES ('Lake')            --campground specific 11
+INSERT Amenity (AmenityName) VALUES ('Horse Trails')    --campground specific 12
+INSERT Amenity (AmenityName) VALUES ('Picnicking')      --campground specific 13
+INSERT Amenity (AmenityName) VALUES ('Fishing')         --campground specific 14
+INSERT Amenity (AmenityName) VALUES ('Boating')         --campground specific 15
 INSERT CampSite_Amenity (CampSiteID_PKFK, AmenityID_PKFK, Quantity) VALUES ('1', '2', '1')
 INSERT CampSite_Amenity (CampSiteID_PKFK, AmenityID_PKFK, Quantity) VALUES ('1', '3', '1')
 INSERT CampSite_Amenity (CampSiteID_PKFK, AmenityID_PKFK, Quantity) VALUES ('1', '4', '1')
 INSERT CampSite_Amenity (CampSiteID_PKFK, AmenityID_PKFK, Quantity) VALUES ('1', '5', '1')
 INSERT CampSite_Amenity (CampSiteID_PKFK, AmenityID_PKFK, Quantity) VALUES ('1', '6', '1')
-
 INSERT CampSite_Amenity (CampSiteID_PKFK, AmenityID_PKFK, Quantity) VALUES ('2', '2', '1')
 INSERT CampSite_Amenity (CampSiteID_PKFK, AmenityID_PKFK, Quantity) VALUES ('2', '3', '1')
 INSERT CampSite_Amenity (CampSiteID_PKFK, AmenityID_PKFK, Quantity) VALUES ('2', '4', '1')
 INSERT CampSite_Amenity (CampSiteID_PKFK, AmenityID_PKFK, Quantity) VALUES ('2', '5', '1')
 INSERT CampSite_Amenity (CampSiteID_PKFK, AmenityID_PKFK, Quantity) VALUES ('2', '6', '1')
-
+INSERT CampSite_Amenity (CampSiteID_PKFK, AmenityID_PKFK, Quantity) VALUES ('3', '2', '1')
+INSERT CampSite_Amenity (CampSiteID_PKFK, AmenityID_PKFK, Quantity) VALUES ('3', '3', '1')
+INSERT CampSite_Amenity (CampSiteID_PKFK, AmenityID_PKFK, Quantity) VALUES ('3', '4', '1')
+INSERT CampSite_Amenity (CampSiteID_PKFK, AmenityID_PKFK, Quantity) VALUES ('3', '5', '1')
+INSERT CampSite_Amenity (CampSiteID_PKFK, AmenityID_PKFK, Quantity) VALUES ('3', '6', '1')
 ---  migrate these to CampGround_Amenity
-INSERT CampSite_Amenity (CampSiteID_PKFK, AmenityID_PKFK, Quantity) VALUES ('1', '1', '1')
-INSERT CampSite_Amenity (CampSiteID_PKFK, AmenityID_PKFK, Quantity) VALUES ('1', '7', '1')
-INSERT CampSite_Amenity (CampSiteID_PKFK, AmenityID_PKFK, Quantity) VALUES ('1', '8', '1')
-INSERT CampSite_Amenity (CampSiteID_PKFK, AmenityID_PKFK, Quantity) VALUES ('1', '9', '1')
-INSERT CampSite_Amenity (CampSiteID_PKFK, AmenityID_PKFK, Quantity) VALUES ('1', '10', '1')
-INSERT CampSite_Amenity (CampSiteID_PKFK, AmenityID_PKFK, Quantity) VALUES ('1', '11', '1')
-INSERT CampSite_Amenity (CampSiteID_PKFK, AmenityID_PKFK, Quantity) VALUES ('1', '12', '1')
-INSERT CampSite_Amenity (CampSiteID_PKFK, AmenityID_PKFK, Quantity) VALUES ('1', '13', '1')
-INSERT CampSite_Amenity (CampSiteID_PKFK, AmenityID_PKFK, Quantity) VALUES ('2', '1', '1')
-
-INSERT CampSite_Amenity (CampSiteID_PKFK, AmenityID_PKFK, Quantity) VALUES ('2', '7', '1')
-INSERT CampSite_Amenity (CampSiteID_PKFK, AmenityID_PKFK, Quantity) VALUES ('2', '8', '1')
-INSERT CampSite_Amenity (CampSiteID_PKFK, AmenityID_PKFK, Quantity) VALUES ('2', '9', '1')
-INSERT CampSite_Amenity (CampSiteID_PKFK, AmenityID_PKFK, Quantity) VALUES ('2', '10', '1')
-INSERT CampSite_Amenity (CampSiteID_PKFK, AmenityID_PKFK, Quantity) VALUES ('2', '11', '1')
-INSERT CampSite_Amenity (CampSiteID_PKFK, AmenityID_PKFK, Quantity) VALUES ('2', '12', '1')
-INSERT CampSite_Amenity (CampSiteID_PKFK, AmenityID_PKFK, Quantity) VALUES ('2', '13', '1')
+INSERT CampGround_Amenity (CampGroundID_PKFK, AmenityID_PKFK, Quantity) VALUES ('1', '1', '1')
+INSERT CampGround_Amenity (CampGroundID_PKFK, AmenityID_PKFK, Quantity) VALUES ('1', '7', '1')
+INSERT CampGround_Amenity (CampGroundID_PKFK, AmenityID_PKFK, Quantity) VALUES ('1', '8', '1')
+INSERT CampGround_Amenity (CampGroundID_PKFK, AmenityID_PKFK, Quantity) VALUES ('1', '9', '1')
+INSERT CampGround_Amenity (CampGroundID_PKFK, AmenityID_PKFK, Quantity) VALUES ('1', '10', '1')
+INSERT CampGround_Amenity (CampGroundID_PKFK, AmenityID_PKFK, Quantity) VALUES ('1', '11', '1')
+INSERT CampGround_Amenity (CampGroundID_PKFK, AmenityID_PKFK, Quantity) VALUES ('1', '12', '1')
+INSERT CampGround_Amenity (CampGroundID_PKFK, AmenityID_PKFK, Quantity) VALUES ('1', '13', '1')
+INSERT CampGround_Amenity (CampGroundID_PKFK, AmenityID_PKFK, Quantity) VALUES ('2', '1', '1')
+INSERT CampGround_Amenity (CampGroundID_PKFK, AmenityID_PKFK, Quantity) VALUES ('2', '7', '1')
+INSERT CampGround_Amenity (CampGroundID_PKFK, AmenityID_PKFK, Quantity) VALUES ('2', '8', '1')
+INSERT CampGround_Amenity (CampGroundID_PKFK, AmenityID_PKFK, Quantity) VALUES ('2', '9', '1')
+INSERT CampGround_Amenity (CampGroundID_PKFK, AmenityID_PKFK, Quantity) VALUES ('2', '10', '1')
+INSERT CampGround_Amenity (CampGroundID_PKFK, AmenityID_PKFK, Quantity) VALUES ('2', '11', '1')
+INSERT CampGround_Amenity (CampGroundID_PKFK, AmenityID_PKFK, Quantity) VALUES ('2', '12', '1')
+INSERT CampGround_Amenity (CampGroundID_PKFK, AmenityID_PKFK, Quantity) VALUES ('2', '13', '1')
+INSERT CampGround_Amenity (CampGroundID_PKFK, AmenityID_PKFK, Quantity) VALUES ('3', '1', '1')
+INSERT CampGround_Amenity (CampGroundID_PKFK, AmenityID_PKFK, Quantity) VALUES ('3', '7', '1')
+INSERT CampGround_Amenity (CampGroundID_PKFK, AmenityID_PKFK, Quantity) VALUES ('3', '8', '1')
+INSERT CampGround_Amenity (CampGroundID_PKFK, AmenityID_PKFK, Quantity) VALUES ('3', '9', '1')
+INSERT CampGround_Amenity (CampGroundID_PKFK, AmenityID_PKFK, Quantity) VALUES ('3', '10', '1')
+INSERT CampGround_Amenity (CampGroundID_PKFK, AmenityID_PKFK, Quantity) VALUES ('3', '11', '1')
+INSERT CampGround_Amenity (CampGroundID_PKFK, AmenityID_PKFK, Quantity) VALUES ('3', '12', '1')
+INSERT CampGround_Amenity (CampGroundID_PKFK, AmenityID_PKFK, Quantity) VALUES ('3', '13', '1')
